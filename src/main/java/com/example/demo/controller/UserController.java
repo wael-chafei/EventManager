@@ -37,6 +37,17 @@ public class UserController {
 		return getted_user;
 	}
 	
+	@DeleteMapping("/users/{id}")  
+	public void deleteUser(@PathVariable int id)  
+	{  
+		repo.deleteById(id);  
+	}
 
-
+	@GetMapping("events")  
+	public List<Event> getEvents()   
+	{  
+		//finds all the products  
+		return eventrepo.findAll(); 	
+	} 
+	
 }
