@@ -1,14 +1,19 @@
 package com.example.demo.controller;
 import java.net.URI;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +31,9 @@ public class UserController {
  
 	@Autowired
 	UserRepo repo ; 
-	@CrossOrigin(origins = "", allowedHeaders = "")
+	ArrayList<Integer> a = new ArrayList<>();
+	
+	@CrossOrigin(origins ="*", allowedHeaders = "*")
 	@PostMapping("add")
 	   public ResponseEntity<User> postBody(@RequestBody User user) {
 		   User persistedUser = repo.save(user);
@@ -50,7 +57,31 @@ public class UserController {
     public List<User> list() {
         return userService.listAllUser();
     }
-	
+    
+    @DeleteMapping("/user/{id}")  
+    public void deleteUser(@PathVariable int id)  
+    {  
+    repo.deleteById(id);  
+    }
+    
+    @PutMapping("/users/{id}")
+    Optional<User> replaceEmployee(@RequestBody User newUser, @PathVariable int id) {
+      
+      return Optional.of(repo.findById(id)
+        .map(user -> {
+        	user.setNom(newUser.getNom());
+        	user.setPrenom(newUser.getPrenom());
+        	user.setTelephone(newUser.getTelephone());
+        	user.setUsername(newUser.getUsername());
+        	user.setPassword(newUser.getPassword());
+          return repo.save(user);
+        })
+        .orElseGet(() -> {
+        	newUser.setId(id);
+          return repo.save(newUser);
+        }));
+    }
 
+  
 
 }
