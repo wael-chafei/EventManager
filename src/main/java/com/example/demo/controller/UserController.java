@@ -4,22 +4,18 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.demo.dao.UserRepo;
 import com.example.demo.entities.User;
 
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 	@Autowired
 	UserRepo repo ; 
 	
-	@PostMapping("add")
-	
+	@PostMapping
 	   public ResponseEntity<User> postBody(@RequestBody User user) {
 		   User persistedUser = repo.save(user);
 	        return ResponseEntity
@@ -28,7 +24,7 @@ public class UserController {
 	            .body(persistedUser);
 	    }
 	
-	@RequestMapping(value = "/user/{id}")
+	@GetMapping("/{id}")
 	public Optional<User> findUserByid(@PathVariable int id) {
 		Optional<User> getted_user ; 
 		getted_user = repo.findById(id);
