@@ -4,12 +4,18 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -67,7 +73,15 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 		}
-		
+	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
 	@Column
 	private String nom;
 	@Column
@@ -78,9 +92,18 @@ public class User implements Serializable {
 	private String username;
 	@Column
 	private String password;
-	/*@OneToMany 
-	private Event event ; */
+	@Column
+	private String email;
 
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Event> events;
+
+	public List<Event> getEvents() {
+		return events;
+	}
+	public void setEvents(List<Event> events) {
+		this.events = events;
+	}
 	
 
 

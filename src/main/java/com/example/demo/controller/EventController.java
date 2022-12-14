@@ -26,7 +26,8 @@ public class EventController {
 	EventRepo repo ; 
 	@CrossOrigin(origins = "", allowedHeaders = "")
 	@PostMapping("addEvent")
-	   public ResponseEntity<Event> postBody(@RequestBody Event event) {
+	   public ResponseEntity<Event> postBody(@RequestBody Event event) throws Exception{
+		
 		Event persistedUser = repo.save(event);
 	        return ResponseEntity
 	            .created(URI
@@ -54,7 +55,8 @@ public class EventController {
 	        .map(event -> {
 	        	event.setNom(newEvent.getNom());
 	        	event.setDate(newEvent.getDate());
-	          return repo.save(event);
+	        	event.setUsers(newEvent.getUsers());
+	 	          return repo.save(event);
 	        })
 	        .orElseGet(() -> {
 	        	newEvent.setId(id);
